@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
@@ -23,6 +24,10 @@ const BookPage = () => {
   const [bookData, setBookData] = useState(Bookdata);
   const [bookList, setBookList] = useState("");
   const token = localStorage.getItem("jwt");
+
+  useEffect(() => {
+    handleGetBook();
+  }, []);
 
   const cardStyle = {
     width: "750px",
@@ -63,6 +68,7 @@ const BookPage = () => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       alert(response.data);
+      handleGetBook();
     } catch (error) {
       console.error("There was an error!", error);
     }
@@ -80,6 +86,7 @@ const BookPage = () => {
   };
 
   const handleLogout = () => {
+    localStorage.removeItem("jwt");
     history("/");
   };
 
@@ -144,9 +151,9 @@ const BookPage = () => {
               variant="contained"
               color="secondary"
               style={buttonStyle}
-              onClick={handleGetBook}
+              onClick={handleLogout}
             >
-              Get Book List
+              Log Out
             </Button>
           </div>
         </CardContent>
